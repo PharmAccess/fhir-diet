@@ -1,9 +1,9 @@
-fastapi>=0.68.0,<0.69.0
+fastapi>=0.109.1
 pydantic>=1.8.0,<2.0.0
 uvicorn>=0.15.0,<0.16.0
 PyYAML>=6
 typer==0.6.1
 fhirpathpy==0.1.0
 rich==12.5.1
-pycryptodome==3.14.1
+pycryptodome==3.19.1
 python-dateutil==2.8.2
