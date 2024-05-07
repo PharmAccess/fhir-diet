@@ -2,6 +2,7 @@ from utils.util import find_nodes
 from Crypto.Hash import SHA3_256
 import json
 
+
 def _compute_hash(msg):
     return SHA3_256.new(msg).hexdigest()
 
@@ -22,6 +23,7 @@ def _hash_nodes(node, key, value):
             else:
                 node_str = node[key]
             node[key] = _compute_hash(node_str.encode())
+
 
 def cryptohash_by_path(resource, el, params):
     ret = resource
