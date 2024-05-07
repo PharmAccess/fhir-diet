@@ -4,11 +4,14 @@ import os
 import sys
 from rich import print
 
+
 def not_implemented(msg):
     raise NotImplementedError(msg)
 
+
 def error(msg):
     raise Exception(msg)
+
 
 def find_nodes(node, path_list, wheres):
     if len(path_list) == 0:
@@ -22,6 +25,7 @@ def find_nodes(node, path_list, wheres):
             return find_nodes(node[key], path_list, wheres)
         else:
             raise Exception
+
 
 def get_date(date_str, date_format):
     try:
@@ -49,9 +53,6 @@ def read_resource_from_file(filename: str):
             f":sad_but_relieved_face: Cannot parse json data.")
         print(e)
         sys.exit(os.EX_OSFILE)
-
-
-
 
 # tokens = ['where', 'first()']
 # where_values = { 'position': 'pos'}
