@@ -1,8 +1,9 @@
-import yaml
-import sys
 import os
-from rich import print
+import sys
+import yaml
+from utils.logger_wrapper import get_logger
 
+log = get_logger()
 
 class Settings:
 
@@ -18,14 +19,15 @@ class Settings:
                 # Set values of the dictionary as class attributes
                 for key in cfg:
                     setattr(self, key, cfg[key])
-                print(f":thumbs_up: Settings loaded: {cfg}")
+                log.info(f":thumbs_up: Settings file {filename} loaded")
+                log.debug(f"Settings={self.__dict__}")
         except IOError as e:
-            print(
+            log.error(
                 f":sad_but_relieved_face: Settings file {filename} does not exist.")
-            print(e)
+            log.error(e)
             sys.exit(os.EX_OSFILE)
         except yaml.YAMLError as e:
-            print(
+            log.error(
                 f":sad_but_relieved_face: Cannot parse settings yaml data.")
-            print(e)
+            log.error(e)
             sys.exit(os.EX_OSFILE)

@@ -6,6 +6,7 @@ from utils.logger_wrapper import get_logger
 
 log = get_logger()
 
+
 def not_implemented(msg):
     raise NotImplementedError(msg)
 
