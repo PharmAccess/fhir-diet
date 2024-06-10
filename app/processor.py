@@ -1,12 +1,13 @@
 import fhirpathpy
-from utils.util import not_implemented
 
 from deidentify import actions as deident_actions, perform_deidentification
-from pseudonymize import actions as pseudo_actions, perform_pseudonymization
 from depseudonymize import actions as depseudo_actions, perform_depseudonymization
+from pseudonymize import actions as pseudo_actions, perform_pseudonymization
+from utils.util import not_implemented
 
 
 def _process_single_resource(resource, settings):
+    result = resource
     for rule in settings.rules:
         fhirpathpy.engine.invocations['log'] = {'fn': lambda ctx, els: [
             {'path': x.path, 'value': x.data} for x in els]}
