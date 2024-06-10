@@ -1,9 +1,10 @@
-from datetime import datetime
 import json
 import os
 import sys
-from rich import print
+from datetime import datetime
+from utils.logger_wrapper import get_logger
 
+log = get_logger()
 
 def not_implemented(msg):
     raise NotImplementedError(msg)
@@ -41,17 +42,17 @@ def read_resource_from_file(filename: str):
     try:
         with open(filename, 'r') as jfile:
             json_data = json.load(jfile)
-            print(f":thumbs_up: json {filename} read")
+            log.info(f":thumbs_up: json {filename} read")
             return json_data
     except IOError as e:
-        print(
+        log.error(
             f":sad_but_relieved_face: File {filename} does not exist.")
-        print(e)
+        log.error(e)
         sys.exit(os.EX_OSFILE)
     except ValueError as e:
-        print(
+        log.error(
             f":sad_but_relieved_face: Cannot parse json data.")
-        print(e)
+        log.error(e)
         sys.exit(os.EX_OSFILE)
 
 # tokens = ['where', 'first()']
