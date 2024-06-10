@@ -4,8 +4,8 @@ import os
 from rich import print
 
 
-class Settings():
-    
+class Settings:
+
     def __init__(self, filename=""):
         if not filename:
             filename = "config.yaml"
@@ -15,7 +15,7 @@ class Settings():
         try:
             with open(filename, "r") as ymlfile:
                 cfg = yaml.safe_load(ymlfile)
-                # Set values of the dictionary as class attributes
+                # Set values of the dictionary as class attributes
                 for key in cfg:
                     setattr(self, key, cfg[key])
                 print(f":thumbs_up: Settings loaded: {cfg}")

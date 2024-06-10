@@ -6,9 +6,10 @@ import json
 def _compute_hash(msg):
     return SHA3_256.new(msg).hexdigest()
 
+
 def _hash_nodes(node, key, value):
-    if (key in list(node.keys())):
-        #print(f'Found {key} in {node}')
+    if key in list(node.keys()):
+        # print(f'Found {key} in {node}')
         if isinstance(node[key], list):
             for idx, data in enumerate(node[key]):
                 if data == value:
@@ -27,8 +28,8 @@ def _hash_nodes(node, key, value):
 
 def cryptohash_by_path(resource, el, params):
     ret = resource
-    path = el['path'] # "Patient.name"
-    path = path.split('.')[1:] # Remove root
+    path = el['path']  # "Patient.name"
+    path = path.split('.')[1:]  # Remove root
     if len(path) == 0:
         ret.clear()
         return

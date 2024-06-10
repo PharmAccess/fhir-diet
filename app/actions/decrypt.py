@@ -5,15 +5,17 @@ import json
 supported_enc_schemes = {
     'RSA': rsa_decrypt
 }
-expected_params = { 'RSA': [ 'private_key' ] }
+expected_params = {'RSA': ['private_key']}
 encoding = 'utf-8'
+
 
 def _decrypt(ciphertext, enc_params):
     plaintext = supported_enc_schemes[enc_params['algorithm']](ciphertext, enc_params)
     return json.loads(plaintext.decode(encoding))
 
+
 def _decrypt_nodes(node, key, value, enc_params):
-    if (key in list(node.keys())):
+    if key in list(node.keys()):
         #print(f'Found {key} in {node}')
         if isinstance(node[key], list):
             for idx, data in enumerate(node[key]):
@@ -30,12 +32,13 @@ def _decrypt_nodes(node, key, value, enc_params):
                 node_str = node[key]
             node[key] = _decrypt(bytes.fromhex(node_str), enc_params)
 
+
 def decrypt_by_path(resource, el, params):
     if not all(param in params for param in expected_params[params['algorithm']]):
         error(f'Missing params (expected {expected_params[params["algorithm"]]})')
     ret = resource
     path = el['path']
-    path = path.split('.')[1:] # Remove root
+    path = path.split('.')[1:]  # Remove root
     if len(path) == 0:
         ret.clear()
         return
