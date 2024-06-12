@@ -7,3 +7,4 @@ fhirpathpy==0.1.0
 rich==12.5.1
 pycryptodome==3.19.1
 python-dateutil==2.8.2
+ndjson>=0.3.1

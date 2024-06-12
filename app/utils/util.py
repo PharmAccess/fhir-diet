@@ -2,6 +2,8 @@ import json
 import os
 import sys
 from datetime import datetime
+
+import ndjson
 from utils.logger_wrapper import get_logger
 
 log = get_logger()
@@ -41,9 +43,13 @@ def read_resource_from_file(filename: str):
     Read a fhir resource from file and return the json data
     """
     try:
+        is_bulk = filename.endswith('.ndjson')
         with open(filename, 'r') as jfile:
-            json_data = json.load(jfile)
-            log.info(f":thumbs_up: json {filename} read")
+            if is_bulk:
+                json_data = ndjson.load(jfile)
+            else:
+                json_data = json.load(jfile)
+            log.info(f":thumbs_up: resource in {filename} read")
             return json_data
     except IOError as e:
         log.error(
@@ -53,6 +59,30 @@ def read_resource_from_file(filename: str):
     except ValueError as e:
         log.error(
             f":sad_but_relieved_face: Cannot parse json data.")
+        log.error(e)
+        sys.exit(os.EX_OSFILE)
+
+
+def write_resource_to_file(filename: str, data):
+    """
+    Write a fhir resource to file
+    """
+    try:
+        is_bulk = filename.endswith('.ndjson')
+        filename = filename.replace('.json', '_deid.json') \
+            if not is_bulk else filename.replace('.ndjson', '_deid.ndjson')
+        # delete file if it exists
+        if os.path.exists(filename):
+            os.remove(filename)
+        with open(filename, 'w') as resource_file:
+            if is_bulk:
+                ndjson.dump(data, resource_file)
+            else:
+                json.dump(data, resource_file)
+            log.info(f":white_check_mark: File {filename} written")
+    except IOError as e:
+        log.error(
+            f":x: could not write to file {filename}.")
         log.error(e)
         sys.exit(os.EX_OSFILE)
 
