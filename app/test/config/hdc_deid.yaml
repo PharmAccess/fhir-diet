@@ -1,0 +1,19 @@
+# Substitute Patient.name with 'foo'
+general:
+  appname: FHIR-DIET
+rules:
+  # Patient
+  - match: Patient.name
+    action: redact
+  - match: Patient.telecom
+    action: redact
+  - match: Patient.birthDate
+    action: perturb
+    params:
+      max: 10
+      min: -5
+  - match: Patient.identifier.value
+    action: encrypt
+    params:
+      algorithm: RSA
+      public_key: test/keys/id_rsa.pub
