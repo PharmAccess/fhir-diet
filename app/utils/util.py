@@ -78,7 +78,7 @@ def write_resource_to_file(filename: str, data):
             if is_bulk:
                 ndjson.dump(data, resource_file)
             else:
-                json.dump(data, resource_file)
+                json.dump(data, resource_file, indent=2)
             log.info(f":white_check_mark: File {filename} written")
     except IOError as e:
         log.error(
