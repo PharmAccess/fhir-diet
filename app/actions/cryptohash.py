@@ -8,22 +8,25 @@ def _compute_hash(msg):
 
 
 def _hash_nodes(node, key, value):
-    if key in list(node.keys()):
-        # print(f'Found {key} in {node}')
-        if isinstance(node[key], list):
-            for idx, data in enumerate(node[key]):
-                if data == value:
-                    if isinstance(node[key][idx], dict):
-                        node_str = json.dumps(node[key][idx])
-                    else:
-                        node_str = node[key][idx]
-                    node[key][idx] = _compute_hash(node_str.encode())
-        else:
-            if isinstance(node[key], dict):
-                node_str = json.dumps(node[key])
+    if isinstance(node, list):
+        [_hash_nodes(node[node_elem_idx], key, value) for node_elem_idx in range(len(node))]
+    else:
+        if key in list(node.keys()):
+            # print(f'Found {key} in {node}')
+            if isinstance(node[key], list):
+                for idx, data in enumerate(node[key]):
+                    if data == value:
+                        if isinstance(node[key][idx], dict):
+                            node_str = json.dumps(node[key][idx])
+                        else:
+                            node_str = node[key][idx]
+                        node[key][idx] = _compute_hash(node_str.encode())
             else:
-                node_str = node[key]
-            node[key] = _compute_hash(node_str.encode())
+                if isinstance(node[key], dict):
+                    node_str = json.dumps(node[key])
+                else:
+                    node_str = node[key]
+                node[key] = _compute_hash(node_str.encode())
 
 
 def cryptohash_by_path(resource, el, params):
