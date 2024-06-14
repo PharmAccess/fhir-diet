@@ -13,7 +13,8 @@ rules:
       max: 10
       min: -5
   - match: Patient.identifier.value
-    action: encrypt
+    action: ttp_pseudonymize
     params:
-      algorithm: RSA
-      public_key: test/keys/id_rsa.pub
+      mapping_file: test/pseudonymization/cot_pseudonym_mapping.csv
+      separator: ","
+      header_lines: 1

@@ -24,5 +24,5 @@ def process(
 
 
 if __name__ == "__main__":
-    init_logger(5)
+    init_logger(4)
     app()

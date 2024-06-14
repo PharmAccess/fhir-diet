@@ -1,9 +1,12 @@
 import fhirpathpy
 
+from utils.logger_wrapper import get_logger
 from deidentify import actions as deident_actions, perform_deidentification
 from depseudonymize import actions as depseudo_actions, perform_depseudonymization
 from pseudonymize import actions as pseudo_actions, perform_pseudonymization
 from utils.util import not_implemented
+
+log = get_logger()
 
 
 def _process_single_resource(resource, settings):
@@ -13,6 +16,7 @@ def _process_single_resource(resource, settings):
             {'path': x.path, 'value': x.data} for x in els]}
         matched_elements = fhirpathpy.evaluate(
             resource, rule['match'] + '.log()', [])
+        log.debug(f'Matched elements: {matched_elements}')
         for el in matched_elements:
             action = rule['action']
             params = rule['params'] if 'params' in rule.keys() else {}
