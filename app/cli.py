@@ -18,7 +18,7 @@ def process(
     resource = read_resource_from_file(resource_filename)
     settings = config.Settings(config_filename)
     ret = process_data(resource, settings)
-    log.debug(f'CLI Process Result={ret}')
+    # log.debug(f'CLI Process Result={ret}')
     if output_to_file:
         write_resource_to_file(resource_filename, ret)
 
