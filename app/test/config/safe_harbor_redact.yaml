@@ -21,7 +21,7 @@
 general:
   appname: FHIR-DIET
 rules:
-  # Names
+  # Names
   - match: Patient.name
     action: redact
   - match: Patient.contact.name
