@@ -1,0 +1,32 @@
+{
+  "intent": "plan",
+  "status": "unknown",
+  "subject": {
+    "type": "Patient",
+    "reference": "77148bbb-47a0-4d32-8139-719f9238772e"
+  },
+  "performer": [
+    {
+      "type": "Organization",
+      "display": "null",
+      "reference": "0"
+    }
+  ],
+  "requester": {
+    "type": "Organization",
+    "display": "Ngarenairobi RC Health centre",
+    "reference": "2"
+  },
+  "authoredOn": "2019-06-04",
+  "identifier": [
+    {
+      "value": "1"
+    }
+  ],
+  "reasonCode": [
+    {
+      "text": "Abortion"
+    }
+  ],
+  "resourceType": "ServiceRequest"
+}
