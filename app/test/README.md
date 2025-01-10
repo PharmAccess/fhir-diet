@@ -11,9 +11,10 @@ To de-identify COT data:
     1. check `pseudonymization/cot_pseudonym_mapping.csv` for an example
     2. update the `config/cot_deid.yaml` to include the pseudonymization mapping file
     3. we use [gpas-tool](https://github.com/PharmAccess/gpas-tool) to create the pseudonymization mapping file
-    4. COT mapping can be found in [archive container](https://cotarchive.blob.core.windows.net/cot-pseudo-ids/cot_pseudonym_mapping.csv)
+    4. hint use [gpas-web](http://localhost:8080/gpas-web/)
+    5. COT mapping can be found in [archive container](https://cotarchive.blob.core.windows.net/cot-pseudo-ids/cot_pseudonym_mapping.csv)
 4. run the de-identification script from the root directory on each resource
 
     ```bash
-    python3 cli.py test/data/cot/patient.json test/config/cot_deid.yaml
+    python3 cli.py test/data/cot/patient.json test/config/cot_deid.yaml --output_to_file
     ```

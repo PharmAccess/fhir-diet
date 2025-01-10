@@ -1,0 +1,50 @@
+general:
+  appname: FHIR-DIET
+rules:
+  # Patient
+#  - match: Patient.name
+#    action: redact
+#  - match: Patient.telecom
+#    action: redact
+#  - match: Patient.birthDate
+#    action: perturb
+#    params:
+#      max: 10
+#      min: -5
+#  - match: Patient.identifier.value
+#    action: ttp_pseudonymize
+#    params:
+#      mapping_file: test/pseudonymization/beneficiary_ids_p.csv
+#      separator: ","
+#      header_lines: 1
+#  - match: Patient.id
+#    action: ttp_pseudonymize
+#    params:
+#      mapping_file: test/pseudonymization/beneficiary_ids_p.csv
+#      separator: ","
+#      header_lines: 1
+  # Condition
+  - match: Condition.subject.reference
+    action: ttp_pseudonymize
+    params:
+      mapping_file: test/pseudonymization/beneficiary_ref_ids_ps.csv
+      separator: ","
+      header_lines: 1
+  - match: Condition.encounter.reference
+    action: ttp_pseudonymize
+    params:
+      mapping_file: test/pseudonymization/treatment_ids_ps_refs.csv
+      separator: ","
+      header_lines: 1
+  - match: Condition.identifier.value
+    action: ttp_pseudonymize
+    params:
+      mapping_file: test/pseudonymization/condition_ids_ps.csv
+      separator: ","
+      header_lines: 1
+  - match: Condition.id
+    action: ttp_pseudonymize
+    params:
+      mapping_file: test/pseudonymization/condition_ids_ps.csv
+      separator: ","
+      header_lines: 1

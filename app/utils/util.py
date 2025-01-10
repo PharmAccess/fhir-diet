@@ -73,13 +73,13 @@ def write_resource_to_file(filename: str, data):
             if not is_bulk else filename.replace('.ndjson', '_deid.ndjson')
         # delete file if it exists
         if os.path.exists(filename):
-            os.remove(filename)
+            os.remove(filename)    
+        log.info(f":writing_hand:  Writing to file {filename}")
         with open(filename, 'w') as resource_file:
             if is_bulk:
                 ndjson.dump(data, resource_file)
             else:
                 json.dump(data, resource_file, indent=2)
-            log.info(f":white_check_mark: File {filename} written")
     except IOError as e:
         log.error(
             f":x: could not write to file {filename}.")

@@ -1,5 +1,6 @@
 import os
 import sys
+
 import yaml
 from utils.logger_wrapper import get_logger
 
@@ -28,6 +29,6 @@ class Settings:
             sys.exit(os.EX_OSFILE)
         except yaml.YAMLError as e:
             log.error(
-                f":sad_but_relieved_face: Cannot parse settings yaml data.")
+                ":sad_but_relieved_face: Cannot parse settings yaml data.")
             log.error(e)
             sys.exit(os.EX_OSFILE)
