@@ -24,27 +24,139 @@ rules:
 #      separator: ","
 #      header_lines: 1
   # Condition
-  - match: Condition.subject.reference
+  # - match: Condition.subject.reference
+  #   action: ttp_pseudonymize
+  #   params:
+  #     mapping_file: test/pseudonymization/beneficiary_ref_ids_ps.csv
+  #     separator: ","
+  #     header_lines: 1
+  # - match: Condition.encounter.reference
+  #   action: ttp_pseudonymize
+  #   params:
+  #     mapping_file: test/pseudonymization/treatment_ids_ps_refs.csv
+  #     separator: ","
+  #     header_lines: 1
+  # - match: Condition.identifier.value
+  #   action: ttp_pseudonymize
+  #   params:
+  #     mapping_file: test/pseudonymization/condition_ids_ps.csv
+  #     separator: ","
+  #     header_lines: 1
+  # - match: Condition.id
+  #   action: ttp_pseudonymize
+  #   params:
+  #     mapping_file: test/pseudonymization/condition_ids_ps.csv
+  #     separator: ","
+  #     header_lines: 1
+  # # encounter
+  # - match: Encounter.identifier.value
+  #   action: ttp_pseudonymize
+  #   params:
+  #     mapping_file: test/pseudonymization/treatment_ids_ps.csv
+  #     separator: ","
+  #     header_lines: 1
+  # - match: Encounter.id
+  #   action: ttp_pseudonymize
+  #   params:
+  #     mapping_file: test/pseudonymization/treatment_ids_ps.csv
+  #     separator: ","
+  #     header_lines: 1
+  # - match: Encounter.subject.reference
+  #   action: ttp_pseudonymize
+  #   params:
+  #     mapping_file: test/pseudonymization/beneficiary_ref_ids_ps.csv
+  #     separator: ","
+  #     header_lines: 1
+  # - match: Encounter.serviceProvider.reference
+  #   action: ttp_pseudonymize
+  #   params:
+  #     mapping_file: test/pseudonymization/org_ids_ps_refs.csv
+  #     separator: ","
+  #     header_lines: 1
+  # MedicationDispense
+  # - match: MedicationDispense.identifier.value
+  #   action: ttp_pseudonymize
+  #   params:
+  #     mapping_file: test/pseudonymization/meds_ids_ps.csv
+  #     separator: ","
+  #     header_lines: 1
+  # - match: MedicationDispense.id
+  #   action: ttp_pseudonymize
+  #   params:
+  #     mapping_file: test/pseudonymization/meds_ids_ps.csv
+  #     separator: ","
+  #     header_lines: 1
+  # - match: MedicationDispense.subject.reference
+  #   action: ttp_pseudonymize
+  #   params:
+  #     mapping_file: test/pseudonymization/beneficiary_ref_ids_ps.csv
+  #     separator: ","
+  #     header_lines: 1
+  # - match: MedicationDispense.performer.actor.reference
+  #   action: ttp_pseudonymize
+  #   params:
+  #     mapping_file: test/pseudonymization/org_ids_ps_refs.csv
+  #     separator: ","
+  #     header_lines: 1
+  # - match: MedicationDispense.context.reference
+  #   action: ttp_pseudonymize
+  #   params:
+  #     mapping_file: test/pseudonymization/treatment_ids_ps_refs.csv
+  #     separator: ","
+  #     header_lines: 1
+#   # Observation
+#  - match: Observation.subject.reference
+#    action: ttp_pseudonymize
+#    params:
+#      mapping_file: test/pseudonymization/beneficiary_ref_ids_ps.csv
+#      separator: ","
+#      header_lines: 1
+#  - match: Observation.performer.reference
+#    action: ttp_pseudonymize
+#    params:
+#      mapping_file: test/pseudonymization/beneficiary_ref_ids_ps.csv
+#      separator: ","
+#      header_lines: 1
+#  - match: Observation.identifier.value
+#    action: ttp_pseudonymize
+#    params:
+#      mapping_file: test/pseudonymization/obs_ids_ps.csv
+#      separator: ","
+#      header_lines: 1
+#  - match: Observation.id
+#    action: ttp_pseudonymize
+#    params:
+#      mapping_file: test/pseudonymization/obs_ids_ps.csv
+#      separator: ","
+#      header_lines: 1
+  # Procedure
+  - match: Procedure.subject.reference
     action: ttp_pseudonymize
     params:
-      mapping_file: test/pseudonymization/beneficiary_ref_ids_ps.csv
+      mapping_file: test/pseudonymization/beneficiary_ref_ids_ps_p.csv
       separator: ","
       header_lines: 1
-  - match: Condition.encounter.reference
+  - match: Procedure.performer.actor.reference
     action: ttp_pseudonymize
     params:
-      mapping_file: test/pseudonymization/treatment_ids_ps_refs.csv
+      mapping_file: test/pseudonymization/org_ids_ps_refs.csv
       separator: ","
       header_lines: 1
-  - match: Condition.identifier.value
+  - match: Procedure.encounter.reference
     action: ttp_pseudonymize
     params:
-      mapping_file: test/pseudonymization/condition_ids_ps.csv
+     mapping_file: test/pseudonymization/treatment_ids_ps_refs.csv
+     separator: ","
+     header_lines: 1
+  - match: procedure.identifier.value
+    action: ttp_pseudonymize
+    params:
+      mapping_file: test/pseudonymization/proc_ids.csv
       separator: ","
       header_lines: 1
-  - match: Condition.id
+  - match: Procedure.id
     action: ttp_pseudonymize
     params:
-      mapping_file: test/pseudonymization/condition_ids_ps.csv
+      mapping_file: test/pseudonymization/proc_ids.csv
       separator: ","
       header_lines: 1
