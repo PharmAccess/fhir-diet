@@ -1,0 +1,69 @@
+# Substitute Patient.name with 'foo'
+general:
+  appname: FHIR-DIET
+rules:
+  # Patient
+  - match: Patient.name
+    action: redact
+  - match: Patient.telecom
+    action: redact
+  - match: Patient.birthDate
+    action: perturb
+    params:
+      max: 10
+      min: -5
+  - match: Patient.identifier.value
+    action: ttp_pseudonymize
+    params:
+      mapping_file: test/pseudonymization/cot_pseudonym_mapping.csv
+      separator: ","
+      header_lines: 1
+  # condition
+  - match: Condition.subject.reference
+    action: ttp_pseudonymize
+    params:
+      mapping_file: test/pseudonymization/cot_pseudonym_mapping.csv
+      separator: ","
+      header_lines: 1
+  # encounter
+  - match: Encounter.subject.reference
+    action: ttp_pseudonymize
+    params:
+      mapping_file: test/pseudonymization/cot_pseudonym_mapping.csv
+      separator: ","
+      header_lines: 1
+  # episodeOfCare
+  - match: EpisodeOfCare.patient.reference
+    action: ttp_pseudonymize
+    params:
+      mapping_file: test/pseudonymization/cot_pseudonym_mapping.csv
+      separator: ","
+      header_lines: 1
+  # observation
+  - match: Observation.subject.reference
+    action: ttp_pseudonymize
+    params:
+      mapping_file: test/pseudonymization/cot_pseudonym_mapping.csv
+      separator: ","
+      header_lines: 1
+  # procedure
+  - match: Procedure.subject.reference
+    action: ttp_pseudonymize
+    params:
+      mapping_file: test/pseudonymization/cot_pseudonym_mapping.csv
+      separator: ","
+      header_lines: 1
+  # questionnaireResponse
+  - match: QuestionnaireResponse.source.reference
+    action: ttp_pseudonymize
+    params:
+      mapping_file: test/pseudonymization/cot_pseudonym_mapping.csv
+      separator: ","
+      header_lines: 1
+  # serviceRequest
+  - match: ServiceRequest.subject.reference
+    action: ttp_pseudonymize
+    params:
+      mapping_file: test/pseudonymization/cot_pseudonym_mapping.csv
+      separator: ","
+      header_lines: 1

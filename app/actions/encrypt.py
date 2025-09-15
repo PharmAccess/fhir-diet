@@ -5,15 +5,19 @@ import json
 supported_enc_schemes = {
     'RSA': rsa_encrypt
 }
-expected_params = { 'RSA': [ 'public_key' ] }
+expected_params = {'RSA': ['public_key']}
 encoding = 'utf-8'
+
 
 def _encrypt(plaintext, enc_params):
     ciphertext = supported_enc_schemes[enc_params['algorithm']](plaintext, enc_params)
     return ciphertext.hex()
 
+
 def _encrypt_nodes(node, key, value, enc_params):
-    if (key in list(node.keys())):
+    if isinstance(node, list):
+        [_encrypt_nodes(node[node_elem_idx], key, value, enc_params) for node_elem_idx in range(len(node))]
+    elif (key in list(node.keys())):
         #print(f'Found {key} in {node}')
         if isinstance(node[key], list):
             for idx, data in enumerate(node[key]):
@@ -30,12 +34,13 @@ def _encrypt_nodes(node, key, value, enc_params):
                 node_str = node[key]
             node[key] = _encrypt(node_str.encode(encoding), enc_params)
 
+
 def encrypt_by_path(resource, el, params):
     if not all(param in params for param in expected_params[params['algorithm']]):
         error(f'Missing params (expected {expected_params[params["algorithm"]]})')
     ret = resource
     path = el['path']
-    path = path.split('.')[1:] # Remove root
+    path = path.split('.')[1:]  # Remove root
     if len(path) == 0:
         ret.clear()
         return
