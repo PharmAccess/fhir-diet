@@ -20,7 +20,7 @@ class Settings:
                 # Set values of the dictionary as class attributes
                 for key in cfg:
                     setattr(self, key, cfg[key])
-                log.info(f":thumbs_up: Settings file {filename} loaded")
+                log.info(f":thumbs_up:  Settings file {filename} loaded")
                 log.debug(f"Settings={self.__dict__}")
         except IOError as e:
             log.error(

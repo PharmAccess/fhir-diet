@@ -16,23 +16,39 @@ log = get_logger()
 def _process_single_resource(resource, settings, mappings):
     result = resource
     for rule in settings.rules:
-        fhirpathpy.engine.invocations['log'] = {'fn': lambda ctx, els: [
-            {'path': x.path, 'value': x.data} for x in els]}
-        matched_elements = fhirpathpy.evaluate(
-            resource, rule['match'] + '.log()', [])
-        log.debug(f'Matched elements: {matched_elements}')
-        for el in matched_elements:
-            action = rule['action']
-            params = rule['params'] if 'params' in rule.keys() else {}
-            if action in list(deident_actions.keys()):
-                result = perform_deidentification(action, resource, el, params)
-            elif action in list(pseudo_actions.keys()):
-                result = perform_pseudonymization(action, resource, el, params, mappings[action])
-            elif action in list(depseudo_actions.keys()):
-                result = perform_depseudonymization(
-                    action, resource, el, params, mappings[action])
-            else:
-                not_implemented(f'Method {action} is not implemented')
+        # Instead of trying to assign to fhirpathpy.engine.invocations['log']
+        # which doesn't work with current version, we'll evaluate the match directly
+        try:
+            matched_elements = fhirpathpy.evaluate(
+                resource, rule['match'], [])
+
+            # Convert the results to the expected format
+            formatted_elements = []
+            for element in matched_elements:
+                if hasattr(element, 'path') and hasattr(element, 'data'):
+                    formatted_elements.append({'path': element.path, 'value': element.data})
+                else:
+                    # Handle cases where element doesn't have path/data attributes
+                    formatted_elements.append({'path': rule['match'], 'value': element})
+
+            log.debug(f'Matched elements: {formatted_elements}')
+
+            for el in formatted_elements:
+                action = rule['action']
+                params = rule['params'] if 'params' in rule.keys() else {}
+                if action in list(deident_actions.keys()):
+                    result = perform_deidentification(action, resource, el, params)
+                elif action in list(pseudo_actions.keys()):
+                    result = perform_pseudonymization(action, resource, el, params, mappings[action])
+                elif action in list(depseudo_actions.keys()):
+                    result = perform_depseudonymization(
+                        action, resource, el, params, mappings[action])
+                else:
+                    not_implemented(f'Method {action} is not implemented')
+        except Exception as e:
+            log.error(f'Error processing rule {rule}: {e}')
+            continue
+
     return result
 
 

@@ -2,6 +2,8 @@ import json
 import os
 import sys
 from datetime import datetime
+from typing import Union, List, Dict, Any
+import polars as pl
 
 import ndjson
 from utils.logger_wrapper import get_logger
@@ -38,22 +40,38 @@ def get_date(date_str, date_format):
         return None
 
 
-def read_resource_from_file(filename: str):
+def read_resource(filename: str, file_dir: str, parquet: bool) -> Union[List[Dict[str, Any]], Dict[str, Any]]:
     """
     Read a fhir resource from file and return the json data
     """
     try:
-        is_bulk = filename.endswith('.ndjson')
-        with open(filename, 'r') as jfile:
-            if is_bulk:
-                json_data = ndjson.load(jfile)
-            else:
-                json_data = json.load(jfile)
-            log.info(f":thumbs_up: resource in {filename} read")
-            return json_data
+
+        if parquet:
+            # check if file dir exists
+            if not os.path.exists(file_dir):
+                log.error(f":sad_but_relieved_face:  Directory {file_dir} does not exist.")
+                sys.exit(os.EX_NOINPUT)
+            # check if there are parquet files in the directory
+            if len([f for f in os.listdir(file_dir) if f.endswith('.parquet')]) == 0:
+                log.error(f":sad_but_relieved_face:  No parquet files found in directory {file_dir}.")
+                sys.exit(os.EX_NOINPUT)
+            # read all parquet files in the directory
+            resource_df = pl.read_parquet(os.path.join(file_dir, '*.parquet'))
+            log.info(f":thumbs_up:  Resource in {file_dir} read")
+            return resource_df.to_dicts()
+
+        else:
+            is_bulk = filename.endswith('.ndjson')
+            with open(filename, 'r') as file:
+                if is_bulk:
+                    json_data = ndjson.load(file)
+                else:
+                    json_data = json.load(file)
+                log.info(f":thumbs_up:  Resource in {filename} read")
+                return json_data
     except IOError as e:
         log.error(
-            f":sad_but_relieved_face: File {filename} does not exist.")
+            f":sad_but_relieved_face:  File {filename} does not exist.")
         log.error(e)
         sys.exit(os.EX_OSFILE)
     except ValueError as e:
@@ -68,12 +86,21 @@ def write_resource_to_file(filename: str, data):
     Write a fhir resource to file
     """
     try:
+        # Handle case where filename is empty (when processing parquet from directory)
+        if not filename:
+            # Generate a default filename based on resource type if available
+            if isinstance(data, list) and len(data) > 0 and 'resourceType' in data[0]:
+                resource_type = data[0]['resourceType']
+                filename = f"{resource_type.lower()}_processed.ndjson"
+            else:
+                filename = "processed_resources.ndjson"
+
         is_bulk = filename.endswith('.ndjson')
         filename = filename.replace('.json', '_deid.json') \
             if not is_bulk else filename.replace('.ndjson', '_deid.ndjson')
         # delete file if it exists
         if os.path.exists(filename):
-            os.remove(filename)    
+            os.remove(filename)
         log.info(f":writing_hand:  Writing to file {filename}")
         with open(filename, 'w') as resource_file:
             if is_bulk:
@@ -84,7 +111,7 @@ def write_resource_to_file(filename: str, data):
         log.error(
             f":x: could not write to file {filename}.")
         log.error(e)
-        sys.exit(os.EX_OSFILE)
+        sys.exit(1)  # Use standard exit code instead of os.EX_OSFILE
 
 # tokens = ['where', 'first()']
 # where_values = { 'position': 'pos'}
