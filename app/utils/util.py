@@ -57,7 +57,7 @@ def read_resource(filename: str, file_dir: str, parquet: bool) -> Union[List[Dic
                 sys.exit(os.EX_NOINPUT)
             # read all parquet files in the directory
             resource_df = pl.read_parquet(os.path.join(file_dir, '*.parquet'))
-            log.info(f":thumbs_up:  Resource in {file_dir} read")
+            log.info(f":thumbs_up:  Resource data in {file_dir} extracted")
             return resource_df.to_dicts()
 
         else:
@@ -67,7 +67,7 @@ def read_resource(filename: str, file_dir: str, parquet: bool) -> Union[List[Dic
                     json_data = ndjson.load(file)
                 else:
                     json_data = json.load(file)
-                log.info(f":thumbs_up:  Resource in {filename} read")
+                log.info(f":thumbs_up:  Resource data in {filename} extracted")
                 return json_data
     except IOError as e:
         log.error(
